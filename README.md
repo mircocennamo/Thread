@@ -1,35 +1,35 @@
 # Creazione di Thread con la classe Thread e interfaccia Runnable
 La programmazione concorrente in Java consente di eseguire più attività contemporaneamente, migliorando le prestazioni e l'efficienza delle applicazioni. In Java, puoi creare thread utilizzando la classe Thread o implementando l'interfaccia Runnable. Ecco come farlo:
-3:
-4:### Creazione di un Thread utilizzando la classe Thread
-5:
-6:```java
-7:public class MyThread extends Thread {
-8:    public void run() {
-9:        System.out.println("Il thread è in esecuzione.");
-10:    }
-11:
-12:    public static void main(String[] args) {
-13:        MyThread thread = new MyThread();
-14:        thread.start();
-15:    }
-16:}
-17:```
-18:
-19:### Creazione di un Thread implementando l'interfaccia Runnable
-20:
-21:``` java
-22:public class MyRunnable implements Runnable {
-23:    public void run() {
-24:        System.out.println("Il thread è in esecuzione.");
-25:    }
-26:
-27:    public static void main(String[] args) {
-28:        Thread thread = new Thread(new MyRunnable());
-29:        thread.start();
-30:    }
-31:}
-32:```
+
+### Creazione di un Thread utilizzando la classe Thread
+
+```java
+public class MyThread extends Thread {
+    public void run() {
+       System.out.println("Il thread è in esecuzione.");
+    }
+
+   public static void main(String[] args) {
+        MyThread thread = new MyThread();
+       thread.start();
+    }
+}
+```
+
+### Creazione di un Thread implementando l'interfaccia Runnable
+
+``` java
+public class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Il thread è in esecuzione.");
+   }
+
+    public static void main(String[] args) {
+       Thread thread = new Thread(new MyRunnable());
+        thread.start();
+    }
+}
+```
 
 # L’INTERFACCIA RUNNABLE
 La nostra classe deve implementare l’interfaccia java.lang.Runnable
