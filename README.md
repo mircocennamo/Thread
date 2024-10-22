@@ -247,6 +247,264 @@ public class ConcurrentHashMapExample {
     }
 }
 ```
+
+
+
+
+## Importanza del testing
+
+Il testing è una parte cruciale dello sviluppo software che garantisce che il codice funzioni come previsto e che i bug vengano identificati e risolti prima che il software venga rilasciato. Ecco alcuni motivi per cui il testing è importante:
+
+1. **Qualità del software**: Assicura che il software soddisfi i requisiti e funzioni correttamente.
+2. **Manutenzione**: Facilita la manutenzione del codice, rendendo più semplice l'individuazione e la correzione dei bug.
+3. **Affidabilità**: Aumenta la fiducia nel software, riducendo il rischio di errori in produzione.
+4. **Documentazione**: I test possono servire come documentazione del comportamento previsto del codice.
+
+# Test Driven Development (TDD)
+
+Il Test Driven Development (TDD) è una metodologia di sviluppo software in cui i test vengono scritti prima del codice di produzione. Il processo TDD segue questi passaggi:
+
+1. **Scrivi un test**: Scrivi un test che fallisce per una nuova funzionalità che desideri implementare.
+2. **Scrivi il codice**: Scrivi il codice minimo necessario per far passare il test.
+3. **Refactoring**: Migliora il codice mantenendo i test passanti.
+
+Esempio di TDD in Java:
+
+```java
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
+public class CalculatorTest {
+    @Test
+    public void testAdd() {
+        Calculator calculator = new Calculator();
+        int result = calculator.add(2, 3);
+        assertEquals(5, result);
+    }
+}
+
+class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+}
+```
+
+In questo esempio, il test per il metodo `add` viene scritto prima di implementare il metodo stesso. Questo assicura che il codice di produzione soddisfi i requisiti del test.
 ```
 
 
+
+```markdown
+# Scrittura di test unitari con JUnit, Assert e gestione delle eccezioni nei test
+
+JUnit è una delle librerie più utilizzate per scrivere test unitari in Java. Ecco alcuni esempi di come scrivere test unitari utilizzando JUnit, Assert e come gestire le eccezioni nei test.
+
+## Esempio di test unitario con JUnit e Assert
+
+```java
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
+public class CalculatorTest {
+    @Test
+    public void testAdd() {
+        Calculator calculator = new Calculator();
+        int result = calculator.add(2, 3);
+        assertEquals(5, result);
+    }
+}
+
+class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+}
+```
+
+## Gestione delle eccezioni nei test
+
+Per verificare che un metodo lanci una specifica eccezione, puoi utilizzare l'annotazione `@Test` con il parametro `expected`.
+
+```java
+import static org.junit.Assert.assertThrows;
+import org.junit.Test;
+
+public class ExceptionTest {
+    @Test(expected = IllegalArgumentException.class)
+    public void testException() {
+        Calculator calculator = new Calculator();
+        calculator.divide(1, 0);
+    }
+}
+
+class Calculator {
+    public int divide(int a, int b) {
+        if (b == 0) {
+            throw new IllegalArgumentException("Division by zero");
+        }
+        return a / b;
+    }
+}
+```
+
+## Test parametrizzati
+
+JUnit 4 e JUnit 5 supportano i test parametrizzati, che consentono di eseguire lo stesso test con diversi set di dati.
+
+### Esempio con JUnit 4
+
+```java
+import static org.junit.Assert.assertEquals;
+import java.util.Arrays;
+import java.util.Collection;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+@RunWith(Parameterized.class)
+public class ParameterizedTest {
+    private int input;
+    private int expected;
+
+    public ParameterizedTest(int input, int expected) {
+        this.input = input;
+        this.expected = expected;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+            { 1, 2 }, { 2, 4 }, { 3, 6 }
+        });
+    }
+
+    @Test
+    public void testMultiplyByTwo() {
+        Calculator calculator = new Calculator();
+        assertEquals(expected, calculator.multiplyByTwo(input));
+    }
+}
+
+class Calculator {
+    public int multiplyByTwo(int input) {
+        return input * 2;
+    }
+}
+```
+
+### Esempio con JUnit 5
+
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+public class ParameterizedTest {
+    @ParameterizedTest
+    @CsvSource({
+        "1, 2",
+        "2, 4",
+        "3, 6"
+    })
+    public void testMultiplyByTwo(int input, int expected) {
+        Calculator calculator = new Calculator();
+        assertEquals(expected, calculator.multiplyByTwo(input));
+    }
+}
+
+class Calculator {
+    public int multiplyByTwo(int input) {
+        return input * 2;
+    }
+}
+```
+
+
+
+# Introduzione al mocking
+
+Il mocking è una tecnica utilizzata nei test unitari per simulare il comportamento di oggetti complessi o dipendenze esterne. Questo consente di isolare il codice in test e di verificare il comportamento di una singola unità di codice senza dover dipendere da altre parti del sistema.
+
+## Utilizzo di Mockito per creare mock e stub
+
+Mockito è una delle librerie più popolari per il mocking in Java. Consente di creare mock e stub in modo semplice e intuitivo.
+
+### Creazione di un mock
+
+Per creare un mock con Mockito, puoi utilizzare il metodo `mock`:
+
+```java
+import static org.mockito.Mockito.*;
+import org.junit.Test;
+import java.util.List;
+
+public class MockExample {
+    @Test
+    public void testMock() {
+        // Crea un mock di List
+        List<String> mockedList = mock(List.class);
+
+        // Definisci il comportamento del mock
+        when(mockedList.get(0)).thenReturn("Hello, World!");
+
+        // Usa il mock nel test
+        System.out.println(mockedList.get(0));  // Stampa "Hello, World!"
+    }
+}
+```
+
+### Creazione di uno stub
+
+Uno stub è un tipo di mock che ha un comportamento predefinito per alcuni metodi. Puoi utilizzare il metodo `when` per definire il comportamento dello stub:
+
+```java
+import static org.mockito.Mockito.*;
+import org.junit.Test;
+import java.util.List;
+
+public class StubExample {
+    @Test
+    public void testStub() {
+        // Crea un mock di List
+        List<String> mockedList = mock(List.class);
+
+        // Definisci il comportamento dello stub
+        when(mockedList.size()).thenReturn(10);
+
+        // Usa lo stub nel test
+        System.out.println(mockedList.size());  // Stampa "10"
+    }
+}
+```
+
+### Verifica delle interazioni
+
+Mockito consente anche di verificare le interazioni con i mock, assicurandosi che i metodi siano stati chiamati con i parametri corretti:
+
+```java
+import static org.mockito.Mockito.*;
+import org.junit.Test;
+import java.util.List;
+
+public class VerifyExample {
+    @Test
+    public void testVerify() {
+        // Crea un mock di List
+        List<String> mockedList = mock(List.class);
+
+        // Usa il mock
+        mockedList.add("one");
+        mockedList.clear();
+
+        // Verifica che il metodo add sia stato chiamato con "one"
+        verify(mockedList).add("one");
+
+        // Verifica che il metodo clear sia stato chiamato
+        verify(mockedList).clear();
+    }
+}
+```
+
+Questi sono solo alcuni esempi di come utilizzare Mockito per creare mock e stub nei test unitari. Mockito offre molte altre funzionalità avanzate per il mocking, come la gestione delle eccezioni, la verifica delle chiamate multiple e molto altro.
+```
